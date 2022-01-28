@@ -1,0 +1,15 @@
+
+ show running-config interface 
+
+ show running-config interface Bundle-Ether1.120
+interface Bundle-Ether4.120
+ mtu 9216
+ service-policy output backbone-qos
+ ipv4 mtu 9000
+ ipv4 address 10.48.176.173 255.255.255.254
+ mpls
+  mtu 9100
+ !
+ load-interval 30
+ encapsulation dot1q 100
+!
