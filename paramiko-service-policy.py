@@ -1,5 +1,4 @@
 def policy():
-
     ExcelExport = [["Device", "Interface", "Description"]]
 
     ssh = paramiko.SSHClient()
