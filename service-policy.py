@@ -6,24 +6,24 @@ def policy():
     IP_Core = "172.16.189.23" # Connecting device via SSH
 
     try:
-        my_connection.connect(IP_Core, port="2222", username=username, password= password, timeout=20)
+        my_connection.connect(IP_Core, port="22", username=username, password= password, timeout=15)
         remote_connection = my_connection.invoke_shell()
 
         print(colored("Connected_ASR:" + IP_Core, "yellow"))
 
         remote_connection.send(" terminal length 0" + "\r")
-        time.sleep(2)
+        time.sleep(1)
         remote_connection.send("show running-config interface" + " \r")
-        time.sleep(2)
-        output3 = remote_connection.recv(99999999)
-        result3 = output3.decode('ascii').strip("\n")
+        time.sleep(1)
+        out12 = remote_connection.recv(9999)
+        res12 = out12.decode('ascii').strip("\n")
 
-        My_file = "log_dc1.txt" # as we received unexpected characters in "result3", its been added into a log file. 
-        log = open(My_file, 'w')
-        log.write(result3)
-        log.close()
+        My_file = "syslog_dc1.txt" # To see unexpected characters in "res12"
+        syslog = open(My_file, 'w')
+        syslog.write(res12)
+        syslog.close()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        with open("log_dc1.txt", "r") as f: 
+        with open("syslog_dc1.txt", "r") as f: 
             my_each_data11 = f.readmy_each_data()
             my_each_data12 = "".join(my_each_data11)
             my_each_data15= my_each_data12.strip("")
