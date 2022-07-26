@@ -1,6 +1,8 @@
 def policy():
     ExcelExport = [["Cisco", "INT", "Tanımlama"]]
 
+														  
+
     my_connection = paramiko.SSHClient()
     my_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     IP_Core = "172.16.189.23" # Connecting device via SSH
@@ -79,7 +81,7 @@ def policy():
 
 
     except Exception as e:
-        print("no connectivity_" + IP_Core +"\n")
+        print("no connectivity" + IP_Core +"\n")
         time.sleep(2)
         with open("unreachables_CISCO.txt", "a") as f:
             f.write(IP_Core + "\n")
