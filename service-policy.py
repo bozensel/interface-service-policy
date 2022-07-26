@@ -1,15 +1,15 @@
 def policy():
-    ExcelExport = [["Device", "Interface", "Description"]]
+    ExcelExport = [["Cisco", "INT", "Tanımlama"]]
 
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    DC_IP = "10.214.68.16" # A device that is connected via SSH
+    my_connection = paramiko.SSHClient()
+    my_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    IP_Core = "172.16.189.23" # Connecting device via SSH
 
     try:
-        ssh.connect(DC_IP, port="2222", username=username, password= password, timeout=20)
-        remote_connection = ssh.invoke_shell()
+        my_connection.connect(IP_Core, port="2222", username=username, password= password, timeout=20)
+        remote_connection = my_connection.invoke_shell()
 
-        print(colored("Connected_ASR:" + DC_IP, "blue"))
+        print(colored("Connected_ASR:" + IP_Core, "yellow"))
 
         remote_connection.send(" terminal length 0" + "\r")
         time.sleep(2)
@@ -18,45 +18,45 @@ def policy():
         output3 = remote_connection.recv(99999999)
         result3 = output3.decode('ascii').strip("\n")
 
-        LOGfile = "log_dc1.txt" # as we received unexpected characters in "result3", its been added into a log file. 
-        log = open(LOGfile, 'w')
+        My_file = "log_dc1.txt" # as we received unexpected characters in "result3", its been added into a log file. 
+        log = open(My_file, 'w')
         log.write(result3)
         log.close()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         with open("log_dc1.txt", "r") as f: 
-            lines6 = f.readlines()
-            lines5 = "".join(lines6)
-            lines7= lines5.strip("")
-            lines = lines7.split()
-            #print(lines)
+            my_each_data11 = f.readmy_each_data()
+            my_each_data12 = "".join(my_each_data11)
+            my_each_data15= my_each_data12.strip("")
+            my_each_data = my_each_data15.split()
+            #print(my_each_data)
 
-        lines2 = []
+        my_each_data2 = []
 
-        for line in lines:
-            lines5 = line.strip('\n')
-            lines2.append(lines5)
+        for line in my_each_data:
+            my_each_data5 = line.strip('\n')
+            my_each_data2.append(my_each_data5)
 
         indices = []
 
-        for i in range(len(lines2)):
-            if lines2[i] == "!": # All lines where "exclamation marks(!)" are located
+        for i in range(len(my_each_data2)):
+            if my_each_data2[i] == "!": # All "my_each_data" which "(!)" located
                 indices.append(i)
 
         # print(indices[0]+1)
-        lines3 = []
-        lines4 = []
+        my_each_data3 = []
+        my_each_data4 = []
 
         k = 0
         j = 0
-        while True: # Each data between sequent exclamation marks
+        while True: # Every data between "!" marks
             v = 1
             while indices[j] + v < indices[k + 1]: 
-                lines4.append(lines2[indices[j] + v])
+                my_each_data4.append(my_each_data2[indices[j] + v])
                 v = v + 1
 
                 if indices[j] + v == indices[k + 1]: 
-                    lines3.append(lines4) 
-                    lines4 = []
+                    my_each_data3.append(my_each_data4) 
+                    my_each_data4 = []
             j = j + 1
             k = k + 1
 
@@ -64,25 +64,25 @@ def policy():
                 break
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        for x in lines3:
-            x1 = " ".join(x)
-            if "Bundle-Ether" in x1:
-                x2 = x1.split()
-                x3 = x2[1]
-                x4 = x3.split(".")
+        for BE in my_each_data3:
+            BE1 = " ".join(BE)
+            if "Bundle-Ether" in BE1:
+                BE2 = BE1.split()
+                BE3 = BE2[1]
+                BE4 = BE3.split(".")
 
-                if len(x4) > 1 and int(x4[1]) > 200 and "l2transport" not in x2 and "service-policy" not in x2 and "description" in x2 and "shutdown" not in x2:
-                    x2.remove("description")
-                    x5 = x4[0] +"."+ x4[1]
-                    print(x5)
-                    ExcelExport.append([DC_IP, x5, x2[2]])
+                if len(BE4) > 1 and int(BE4[1]) > 200 and "transport" not in BE2 and "service-policy" not in BE2:
+                    BE2.remove("description")
+                    BE5 = BE4[0] +"."+ BE4[1]
+                    print(BE5)
+                    ExcelExport.append([IP_Core, BE5, BE2[2]])
 
 
     except Exception as e:
-        print("no connectivity_" + DC_IP +"\n")
+        print("no connectivity_" + IP_Core +"\n")
         time.sleep(2)
         with open("unreachables_CISCO.txt", "a") as f:
-            f.write(DC_IP + "\n")
+            f.write(IP_Core + "\n")
         f.close()
 
 
