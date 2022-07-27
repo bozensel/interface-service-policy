@@ -8,11 +8,10 @@ from termcolor import colored
 import datetime
 import pandas as pd
 import threading
-from queue import Queue
 import pandas as pd
 import time, smtplib
 
-def policy():
+def qos():
     ExcelExport = [["Cisco", "INT", "Tanımlama"]]
 
 														  
@@ -102,4 +101,4 @@ def policy():
         f.close()
 
 
-policy()
+qos()
