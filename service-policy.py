@@ -87,8 +87,8 @@ def qos():
                 BE99 = BE96.split(".")
 
                 if len(BE99) > 1 and int(BE99[1]) > 150 and "transport" not in BE91 and "service-policy" not in BE91:
-                    BE91.remove("description")
-                    BE90 = BE99[0] +"."+ BE99[1]
+                    BE91.remove("ingress")
+		    BE90 = BE99[0] +"."+ BE99[1]
                     print(BE90)
                     ExcelExport.append([IP_Core, BE90, BE91[2]])
 
