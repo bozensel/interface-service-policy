@@ -1,4 +1,4 @@
-from PASSWORD import username, password
+from pass import username, password
 import re
 import paramiko
 import openpyxl
