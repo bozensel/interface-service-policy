@@ -1,3 +1,17 @@
+from PASSWORD import username, password
+import re
+import paramiko
+import openpyxl
+import os
+import multiprocessing
+from termcolor import colored
+import datetime
+import pandas as pd
+import threading
+from queue import Queue
+import pandas as pd
+import time, smtplib
+
 def policy():
     ExcelExport = [["Cisco", "INT", "Tanımlama"]]
 
@@ -11,79 +25,79 @@ def policy():
         my_connection.connect(IP_Core, port="22", username=username, password= password, timeout=15)
         remote_connection = my_connection.invoke_shell()
 
-        print(colored("Connected_ASR:" + IP_Core, "yellow"))
+        print(colored("Establised_NEXUS:" + IP_Core, "yellow"))
 
-        remote_connection.send(" terminal length 0" + "\r")
+        remote_connection.send(" terminal length 0" + "\n")
         time.sleep(1)
-        remote_connection.send("show running-config interface" + " \r")
+        remote_connection.send("show running-config " + " \r")
         time.sleep(1)
-        out12 = remote_connection.recv(9999)
-        res12 = out12.decode('ascii').strip("\n")
+        cikti = remote_connection.recv(65000)
+        sonuc20 = cikti.decode('ascii').strip("\n")
 
-        My_file = "syslog_dc1.txt" # To see unexpected characters in "res12"
+        My_file = "syslog_spines.txt" # To see abnormal characters in "sonuc20"
         syslog = open(My_file, 'w')
-        syslog.write(res12)
+        syslog.write(sonuc20)
         syslog.close()
-# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        with open("syslog_dc1.txt", "r") as f: 
-            my_each_data11 = f.readmy_each_data()
+# #############################################################
+        with open("syslog_spines.txt", "r") as f: 
+            my_each_data11 = f.readlines()
             my_each_data12 = "".join(my_each_data11)
             my_each_data15= my_each_data12.strip("")
             my_each_data = my_each_data15.split()
             #print(my_each_data)
 
-        my_each_data2 = []
+        my_each_data25 = []
 
         for line in my_each_data:
             my_each_data5 = line.strip('\n')
-            my_each_data2.append(my_each_data5)
+            my_each_data25.append(my_each_data5)
 
-        indices = []
+        idxes = []
 
-        for i in range(len(my_each_data2)):
-            if my_each_data2[i] == "!": # All "my_each_data" which "(!)" located
-                indices.append(i)
+        for i in range(len(my_each_data25)):
+            if my_each_data25[i] == "!": # All "my_each_data" which "(!)" located
+                idxes.append(i)
 
-        # print(indices[0]+1)
-        my_each_data3 = []
+        # print(idxes[0]+1)
+        my_each_data26 = []
         my_each_data4 = []
 
-        k = 0
-        j = 0
-        while True: # Every data between "!" marks
+        e = 0
+        d = 0
+        while True: # Every data between "!" mares
             v = 1
-            while indices[j] + v < indices[k + 1]: 
-                my_each_data4.append(my_each_data2[indices[j] + v])
+            while idxes[d] + v < idxes[e + 1]: 
+                my_each_data4.append(my_each_data25[idxes[d] + v])
                 v = v + 1
 
-                if indices[j] + v == indices[k + 1]: 
-                    my_each_data3.append(my_each_data4) 
+                if idxes[d] + v == idxes[e + 1]: 
+                    my_each_data26.append(my_each_data4) 
                     my_each_data4 = []
-            j = j + 1
-            k = k + 1
+            d = d + 1
+            e = e + 1
 
-            if k + 1 == len(indices):
+            if e + 1 == len(idxes):
                 break
-# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ####################################################
 
-        for BE in my_each_data3:
+        for BE in my_each_data26:
             BE1 = " ".join(BE)
             if "Bundle-Ether" in BE1:
-                BE2 = BE1.split()
-                BE3 = BE2[1]
-                BE4 = BE3.split(".")
+                BE91 = BE1.split()
+                BE96 = BE91[1]
+                BE99 = BE96.split(".")
 
-                if len(BE4) > 1 and int(BE4[1]) > 200 and "transport" not in BE2 and "service-policy" not in BE2:
-                    BE2.remove("description")
-                    BE5 = BE4[0] +"."+ BE4[1]
-                    print(BE5)
-                    ExcelExport.append([IP_Core, BE5, BE2[2]])
+                if len(BE99) > 1 and int(BE99[1]) > 150 and "transport" not in BE91 and "service-policy" not in BE91:
+                    BE91.remove("description")
+                    BE90 = BE99[0] +"."+ BE99[1]
+                    print(BE90)
+                    ExcelExport.append([IP_Core, BE90, BE91[2]])
 
 
     except Exception as e:
         print("no connectivity" + IP_Core +"\n")
         time.sleep(2)
-        with open("unreachables_CISCO.txt", "a") as f:
+        with open("ulasilamayan ipler.txt", "a") as f:
             f.write(IP_Core + "\n")
         f.close()
 
