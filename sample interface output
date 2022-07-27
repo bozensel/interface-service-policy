@@ -1,8 +1,8 @@
 
  show running-config  
 
- show running-config interface Bundle-Ether1.120
-interface Bundle-Ether4.120
+ show running-config interface Bundle-Ether2.119
+interface Bundle-Ether2.119
  mtu 9216
  service-policy output backbone-qos
  ipv4 mtu 9000
